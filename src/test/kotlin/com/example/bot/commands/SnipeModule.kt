@@ -23,7 +23,7 @@ class SnipeModule(kdp: KDP) : Module(kdp, "Snipe", "Snipe Module") {
                 } else {
                     try {
                         cache[cache.size - 1]
-                    } catch (e: Exception) {
+                    } catch (e: ArrayIndexOutOfBoundsException) {
                         error("No snipes found! :(")
                     }
                 } ?: error("Failed to retrieve message")
