@@ -46,7 +46,7 @@ class KCache {
 
     fun retrieveDeleteCache() = deletedMessagesCache.toList()
 
-    fun clear(cacheType: CacheType) = when(cacheType) {
+    fun clear(cacheType: CacheType = CacheType.All) = when(cacheType) {
         CacheType.Message -> launchCoroutine("Clear Coroutine") { cache.clear() }
 
         CacheType.Delete -> launchCoroutine("Clear Coroutine") { deletedMessagesCache.clear() }
