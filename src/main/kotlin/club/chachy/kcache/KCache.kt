@@ -21,24 +21,18 @@ class KCache {
 
     fun processEvent(event: MessageReceivedEvent) {
         when {
-            ignoreBots && event.author.isBot -> {
-                return
-            }
-            else -> {
-                cache.add(CacheObject(event.message, event.author, event.guild))
-            }
+            ignoreBots && event.author.isBot -> return
+            else -> cache.add(CacheObject(event.message, event.author, event.guild))
+
         }
     }
 
     fun processEvent(event: MessageDeleteEvent) {
         val `object` = DeletedCacheObject(cache.firstOrNull { it.message.id == event.messageId } ?: return)
         when {
-            ignoreBots && `object`.cachedObject.author.isBot -> {
-                return
-            }
-            else -> {
-                deletedMessagesCache.add(`object`)
-            }
+            ignoreBots && `object`.cachedObject.author.isBot -> return
+
+            else -> deletedMessagesCache.add(`object`)
         }
     }
 
@@ -61,8 +55,8 @@ class KCache {
         override fun install(pipeline: KDP, configure: KCache.() -> Unit): KCache {
             val feature = KCache().apply(configure)
             with(pipeline.manager) {
-                on<MessageReceivedEvent>().subscribe { launchCoroutine("KCacheCachingHandler") { feature.processEvent(it) } }
-                on<MessageDeleteEvent>().subscribe { launchCoroutine("KCacheCachingHandler") { feature.processEvent(it) } }
+                on<MessageReceivedEvent>().subscribe { launchCoroutine("KCache Cache") { feature.processEvent(it) } }
+                on<MessageDeleteEvent>().subscribe { launchCoroutine("KCache Cache") { feature.processEvent(it) } }
             }
             return feature
         }
