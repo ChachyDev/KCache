@@ -55,8 +55,8 @@ class KCache {
         override fun install(pipeline: KDP, configure: KCache.() -> Unit): KCache {
             val feature = KCache().apply(configure)
             with(pipeline.manager) {
-                on<MessageReceivedEvent>().subscribe { launchCoroutine("KCache Cache") { feature.processEvent(it) } }
-                on<MessageDeleteEvent>().subscribe { launchCoroutine("KCache Cache") { feature.processEvent(it) } }
+                on<MessageReceivedEvent>().subscribe { launchCoroutine("KCache Received Processing") { feature.processEvent(it) } }
+                on<MessageDeleteEvent>().subscribe { launchCoroutine("KCache Deletion Processing") { feature.processEvent(it) } }
             }
             return feature
         }
