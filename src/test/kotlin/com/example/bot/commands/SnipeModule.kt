@@ -25,13 +25,14 @@ class SnipeModule(kdp: KDP) : Module(kdp, "Snipe", "Snipe Module") {
                         error("Guild only command!")
                     } else {
                         try {
-                            cache.filter {
+                            val c = cache.filter {
                                 if (it.cachedObject.guild != null) {
                                     it.cachedObject.guild?.id == guild?.id
                                 } else {
                                     return@handler
                                 }
-                            }[cache.size - 1]
+                            }
+                            c[c.size - 1]
                         } catch (e: ArrayIndexOutOfBoundsException) {
                             error("No snipes found! :(")
                         }
