@@ -21,10 +21,20 @@ class SnipeModule(kdp: KDP) : Module(kdp, "Snipe", "Snipe Module") {
                 val cacheObject = if (message != null) {
                     cache.find { it.cachedObject.message.id == message.id }
                 } else {
-                    try {
-                        cache[cache.size - 1]
-                    } catch (e: ArrayIndexOutOfBoundsException) {
-                        error("No snipes found! :(")
+                    if (guild == null) {
+                        error("Guild only command!")
+                    } else {
+                        try {
+                            cache.filter {
+                                if (it.cachedObject.guild != null) {
+                                    it.cachedObject.guild?.id == guild?.id
+                                } else {
+                                    return@handler
+                                }
+                            }[cache.size - 1]
+                        } catch (e: ArrayIndexOutOfBoundsException) {
+                            error("No snipes found! :(")
+                        }
                     }
                 } ?: error("Failed to retrieve message")
 
